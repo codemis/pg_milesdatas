@@ -1,0 +1,14 @@
+body {
+	margin-top: 35px;
+}
+.banner span.brand {
+	float: none;
+	color: #FFFFFF;
+	font-weight: normal;
+}
+.banner span.brand i {
+	margin-top: 5px;
+}
+.centered {
+	text-align: center;
+}
