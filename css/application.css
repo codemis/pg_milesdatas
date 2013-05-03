@@ -1,5 +1,5 @@
 body {
-	margin-top: 35px;
+	margin-top: 50px;
 }
 .banner span.brand {
 	float: none;
@@ -11,4 +11,19 @@ body {
 }
 .centered {
 	text-align: center;
+}
+#step-one {
+	padding-top: 10px;
+}
+/*#step-one a {
+	margin-right: 10px;
+}
+#step-one a:last-child {
+	margin-right: 0px;
+}*/
+.icon-auto {
+	background-image: url("/img/auto.png");
+	height: 32px;
+	width: 32px;
+	background-position: 0px 0px;
 }
