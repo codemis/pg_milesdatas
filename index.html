@@ -19,6 +19,51 @@
           <div id="step-one" class="step centered"></div>
           <div id="step-two" class="step centered hide">
             <h3 class="title">Title</h3>
+            <form class="form-horizontal" id="starting-form">
+              <div class="control-group">
+                <div class="controls">
+                  <input type="text" id="starting-location" placeholder="Starting Location">
+                </div>
+              </div>
+              <div class="control-group">
+                <div class="controls">
+                  <input type="number" id="starting-odometer" placeholder="Odometer" min="50000" max="300000">
+                </div>
+              </div>
+              <div class="control-group">
+                <div class="controls">
+                  <input type="text" id="reason" placeholder="Reason for Trip">
+                </div>
+              </div>
+              <div class="control-group">
+                <div class="controls">
+                  <button type="submit" class="btn">Submit</button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div id="step-three" class="step centered hide">
+            <h3 class="title">Title</h3>
+            <form class="form-horizontal" id="stopping-form">
+              <div class="control-group">
+                <div class="controls">
+                  <input type="text" id="stopping-location" placeholder="Ending Location">
+                </div>
+              </div>
+              <div class="control-group">
+                <div class="controls">
+                  <input type="number" id="stopping-odometer" placeholder="Odometer" min="50000" max="300000">
+                </div>
+              </div>
+              <div class="control-group">
+                <div class="controls">
+                  <button type="submit" class="btn">Complete</button>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div id="step-confirm" class="step centered hide">
+            <h3 class="title">Title</h3>
           </div>
         </div>
         <script type="text/javascript" charset="utf-8" src="js/jquery.min.js"></script>
