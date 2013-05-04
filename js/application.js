@@ -20,6 +20,7 @@ jQuery(document).ready(function($) {
 	});
 	$('a.step-nav-link').click(function() {
 		var rel = $(this).attr('rel');
+		setupForms(rel);
 		$('#step-nav').fadeOut('slow', function() {
 			$('#'+rel).fadeIn('slow');
 		});
@@ -63,6 +64,16 @@ function setStoppingFormData() {
 function checkAndShowSaveButton() {
 	if((startingStepComplete === true) && (stoppingStepComplete === true)) {
 		$('a.step-nav-complete').removeClass('disabled');
+	}
+};
+function setupForms(step) {
+	if((step == 'step-two') && (startingStepComplete === true)) {
+		$('input#starting-location').val(data['start']['location']);
+		$('input#starting-odometer').val(data['start']['odometer']);
+		$('input#reason').val(data['start']['reason']);
+	}else if((step == 'step-three') && (stoppingStepComplete === true)) {
+		$('input#stopping-location').val(data['stop']['location']);
+		$('input#stopping-odometer').val(data['stop']['odometer']);
 	}
 };
 
