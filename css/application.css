@@ -12,15 +12,6 @@ body {
 .centered {
 	text-align: center;
 }
-#step-one {
-	padding-top: 10px;
-}
-/*#step-one a {
-	margin-right: 10px;
-}
-#step-one a:last-child {
-	margin-right: 0px;
-}*/
 .icon-auto {
 	background-image: url("/img/auto.png");
 	height: 32px;
