@@ -1,5 +1,5 @@
 var cars = ["Acura", "Honda"];
-var data = {'selectedCarIndex': '', 'start': {}, 'stop': {}};
+var data = {'selectedCarIndex': '', 'start': {'useCoords': false}, 'stop': {'useCoords': false}};
 var startingStepComplete = false;
 var stoppingStepComplete = false;
 jQuery(document).ready(function($) {
@@ -7,9 +7,6 @@ jQuery(document).ready(function($) {
 		var carButton = $('<a/>').addClass("btn btn-large btn-primary btn-block cars").attr("rel", index).html(val+"<br><i class='icon-auto'></i></a>");
 		$('#step-one').append(carButton);
 	});
-	if(navigator.geolocation){
-		navigator.geolocation.getCurrentPosition(handleStartPosition);
-	}
 	$('a.cars').click(function() {
 		data['selectedCarIndex'] = $(this).attr("rel");
 		$('#step-nav h3.title').text(cars[data['selectedCarIndex']]);
@@ -25,7 +22,11 @@ jQuery(document).ready(function($) {
 			$('#'+rel).fadeIn('slow');
 		});
 	});
-	$('form#starting-form').submit(function() {
+	$('a.step-nav-complete').click(function() {
+		console.log(data);
+		return false;
+	});
+	$('form#start-form').submit(function() {
 		setStartingFormData();
 		$('#step-two').fadeOut('slow', function() {
 			$('a.step-nav-link[rel="step-two"]').children('i').removeClass('icon-exclamation-sign').addClass('icon-ok');
@@ -34,10 +35,7 @@ jQuery(document).ready(function($) {
 		});
 		return false;
 	});
-	$('form#stopping-form').submit(function(){
-		if(navigator.geolocation){
-			navigator.geolocation.getCurrentPosition(handleStopPosition);
-		}
+	$('form#stop-form').submit(function(){
 		setStoppingFormData();
 		$('#step-three').fadeOut('slow', function() {
 			$('a.step-nav-link[rel="step-three"]').children('i').removeClass('icon-exclamation-sign').addClass('icon-ok');
@@ -46,12 +44,16 @@ jQuery(document).ready(function($) {
 		});
 		return false;
 	});
+	$('button.coordinates').click(function() {
+		switchCoordinates(this);
+		return false;
+	});
 });
 function handleStartPosition(pos) {
-	data['start'] = {'lat': pos.coords.latitude, 'long': pos.coords.longitude};
+	$.extend(data['start'], {'lat': pos.coords.latitude, 'long': pos.coords.longitude});
 };
 function handleStopPosition(pos) {
-	data['stop'] = {'lat': pos.coords.latitude, 'long': pos.coords.longitude};
+	$.extend(data['stop'], {'lat': pos.coords.latitude, 'long': pos.coords.longitude});
 };
 function setStartingFormData() {
 	$.extend(data['start'], {'location': $('input#starting-location').val(), 'odometer': $('input#starting-odometer').val(), 'reason': $('input#reason').val()});
@@ -62,18 +64,39 @@ function setStoppingFormData() {
 	stoppingStepComplete = true;
 };
 function checkAndShowSaveButton() {
-	if((startingStepComplete === true) && (stoppingStepComplete === true)) {
+	if((startingStepComplete === true) && (stoppingStepComplete === true)){
 		$('a.step-nav-complete').removeClass('disabled');
 	}
 };
 function setupForms(step) {
-	if((step == 'step-two') && (startingStepComplete === true)) {
+	if((step == 'step-two') && (startingStepComplete === true)){
 		$('input#starting-location').val(data['start']['location']);
 		$('input#starting-odometer').val(data['start']['odometer']);
 		$('input#reason').val(data['start']['reason']);
-	}else if((step == 'step-three') && (stoppingStepComplete === true)) {
+	}else if((step == 'step-three') && (stoppingStepComplete === true)){
 		$('input#stopping-location').val(data['stop']['location']);
 		$('input#stopping-odometer').val(data['stop']['odometer']);
 	}
 };
-
+function switchCoordinates(ele) {
+	var button = $(ele);
+	var rel = button.attr('rel');
+	if(data[rel]['useCoords'] === true){
+		data[rel]['useCoords'] = false;
+		button.removeClass('btn-success').addClass('btn-danger').html('<i class="icon-screenshot icon-white"></i> Coordinates: Off');
+		data[rel]['lat'] = null;
+		data[rel]['long'] = null;
+	}else{
+		if(navigator.geolocation){
+			data[rel]['useCoords'] = true;
+			if(rel == 'start') {
+				navigator.geolocation.getCurrentPosition(handleStartPosition);
+			} else{
+				navigator.geolocation.getCurrentPosition(handleStopPosition);
+			}
+			button.removeClass('btn-danger').addClass('btn-success').html('<i class="icon-screenshot icon-white"></i> Coordinates: On');
+		} else{
+			alert('Sorry, but your phone does not offer your coordinates.');
+		}
+	}
+};
