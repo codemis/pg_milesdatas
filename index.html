@@ -25,47 +25,47 @@
           </div>
           <div id="step-two" class="step centered hide">
             <h3 class="title">Starting Data</h3>
-            <form class="form-horizontal" id="start-form">
+            <form id="start-form">
               <div class="control-group">
                 <div class="controls">
-                  <input type="text" id="starting-location" placeholder="Starting Location">
+                  <input type="text" id="starting-location" placeholder="Starting Location" class="input-block-level">
                 </div>
               </div>
               <div class="control-group">
                 <div class="controls">
-                  <input type="number" id="starting-odometer" placeholder="Odometer" min="50000" max="300000">
+                  <input type="text" id="starting-odometer" placeholder="Odometer" class="input-block-level">
                 </div>
               </div>
               <div class="control-group">
                 <div class="controls">
-                  <input type="text" id="reason" placeholder="Reason for Trip">
+                  <input type="text" id="reason" placeholder="Reason for Trip" class="input-block-level">
                 </div>
               </div>
               <div class="control-group">
                 <div class="controls">
-                  <button type="button" class="btn btn-danger coordinates" rel="start"><i class="icon-screenshot icon-white"></i> Coordinates: Off</button>
-                  <button type="submit" class="btn">Record</button>
+                  <button type="button" class="btn btn-danger coordinates btn-block" rel="start"><i class="icon-screenshot icon-white"></i> Coordinates: Off</button>
+                  <button type="submit" class="btn btn-block">Record</button>
                 </div>
               </div>
             </form>
           </div>
           <div id="step-three" class="step centered hide">
             <h3 class="title">Stopping Data</h3>
-            <form class="form-horizontal" id="stop-form">
+            <form id="stop-form">
               <div class="control-group">
                 <div class="controls">
-                  <input type="text" id="stopping-location" placeholder="Ending Location">
+                  <input type="text" id="stopping-location" placeholder="Ending Location" class="input-block-level">
                 </div>
               </div>
               <div class="control-group">
                 <div class="controls">
-                  <input type="number" id="stopping-odometer" placeholder="Odometer" min="50000" max="300000">
+                  <input type="text" id="stopping-odometer" placeholder="Odometer" class="input-block-level">
                 </div>
               </div>
               <div class="control-group">
                 <div class="controls">
-                  <button type="button" class="btn btn-danger coordinates" rel="stop"><i class="icon-screenshot icon-white"></i> Coordinates: Off</button>
-                  <button type="submit" class="btn">Record</button>
+                  <button type="button" class="btn btn-danger coordinates btn-block" rel="stop"><i class="icon-screenshot icon-white"></i> Coordinates: Off</button>
+                  <button type="submit" class="btn btn-block">Record</button>
                 </div>
               </div>
             </form>
