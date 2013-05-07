@@ -1,5 +1,5 @@
 var cars = ["Acura", "Honda"];
-var data = {'selectedCarIndex': '', 'start': {'useCoords': false}, 'stop': {'useCoords': false}};
+var data = {'selectedCarIndex': '', 'starting': {'useCoords': false}, 'stopping': {'useCoords': false}};
 var startingStepComplete = false;
 var stoppingStepComplete = false;
 jQuery(document).ready(function($) {
@@ -26,22 +26,26 @@ jQuery(document).ready(function($) {
 		console.log(data);
 		return false;
 	});
-	$('form#start-form').submit(function() {
-		setStartingFormData();
-		$('#step-two').fadeOut('slow', function() {
-			$('a.step-nav-link[rel="step-two"]').children('i').removeClass('icon-exclamation-sign').addClass('icon-ok');
-			checkAndShowSaveButton();
-			$('#step-nav').fadeIn('slow');
-		});
+	$('form#starting-form').submit(function() {
+		if(isFormIsValid('starting') === true){
+			setStartingFormData();
+			$('#step-two').fadeOut('slow', function() {
+				$('a.step-nav-link[rel="step-two"]').children('i').removeClass('icon-exclamation-sign').addClass('icon-ok');
+				checkAndShowSaveButton();
+				$('#step-nav').fadeIn('slow');
+			});
+		}
 		return false;
 	});
-	$('form#stop-form').submit(function(){
-		setStoppingFormData();
-		$('#step-three').fadeOut('slow', function() {
-			$('a.step-nav-link[rel="step-three"]').children('i').removeClass('icon-exclamation-sign').addClass('icon-ok');
-			checkAndShowSaveButton();
-			$('#step-nav').fadeIn('slow');
-		});
+	$('form#stopping-form').submit(function(){
+		if(isFormIsValid('stopping') === true){
+			setStoppingFormData();
+			$('#step-three').fadeOut('slow', function() {
+				$('a.step-nav-link[rel="step-three"]').children('i').removeClass('icon-exclamation-sign').addClass('icon-ok');
+				checkAndShowSaveButton();
+				$('#step-nav').fadeIn('slow');
+			});
+		}
 		return false;
 	});
 	$('button.coordinates').click(function() {
@@ -50,17 +54,17 @@ jQuery(document).ready(function($) {
 	});
 });
 function handleStartPosition(pos) {
-	$.extend(data['start'], {'lat': pos.coords.latitude, 'long': pos.coords.longitude});
+	$.extend(data['starting'], {'lat': pos.coords.latitude, 'long': pos.coords.longitude});
 };
 function handleStopPosition(pos) {
-	$.extend(data['stop'], {'lat': pos.coords.latitude, 'long': pos.coords.longitude});
+	$.extend(data['stopping'], {'lat': pos.coords.latitude, 'long': pos.coords.longitude});
 };
 function setStartingFormData() {
-	$.extend(data['start'], {'location': $('input#starting-location').val(), 'odometer': $('input#starting-odometer').val(), 'reason': $('input#reason').val()});
+	$.extend(data['starting'], {'location': $('input#starting-location').val(), 'odometer': $('input#starting-odometer').val(), 'reason': $('input#reason').val()});
 	startingStepComplete = true;
 };
 function setStoppingFormData() {
-	$.extend(data['stop'], {'location': $('input#stopping-location').val(), 'odometer': $('input#stopping-odometer').val()});
+	$.extend(data['stopping'], {'location': $('input#stopping-location').val(), 'odometer': $('input#stopping-odometer').val()});
 	stoppingStepComplete = true;
 };
 function checkAndShowSaveButton() {
@@ -70,12 +74,12 @@ function checkAndShowSaveButton() {
 };
 function setupForms(step) {
 	if((step == 'step-two') && (startingStepComplete === true)){
-		$('input#starting-location').val(data['start']['location']);
-		$('input#starting-odometer').val(data['start']['odometer']);
-		$('input#reason').val(data['start']['reason']);
+		$('input#starting-location').val(data['starting']['location']);
+		$('input#starting-odometer').val(data['starting']['odometer']);
+		$('input#reason').val(data['starting']['reason']);
 	}else if((step == 'step-three') && (stoppingStepComplete === true)){
-		$('input#stopping-location').val(data['stop']['location']);
-		$('input#stopping-odometer').val(data['stop']['odometer']);
+		$('input#stopping-location').val(data['stopping']['location']);
+		$('input#stopping-odometer').val(data['stopping']['odometer']);
 	}
 };
 function switchCoordinates(ele) {
@@ -89,7 +93,7 @@ function switchCoordinates(ele) {
 	}else{
 		if(navigator.geolocation){
 			data[rel]['useCoords'] = true;
-			if(rel == 'start') {
+			if(rel == 'starting') {
 				navigator.geolocation.getCurrentPosition(handleStartPosition);
 			} else{
 				navigator.geolocation.getCurrentPosition(handleStopPosition);
@@ -99,4 +103,44 @@ function switchCoordinates(ele) {
 			alert('Sorry, but your phone does not offer your coordinates.');
 		}
 	}
+};
+/**
+ * formType = starting or stopping 
+ */
+function isFormIsValid(formType) {
+	var isValid = true;
+	if(data[formType]['useCoords'] === false){
+		isValid = isInputValid(formType+'-location');
+	}else{
+		hideFormError(formType+'-location');
+	}
+	isValid = isInputValid(formType+'-odometer');
+	if(formType == 'starting'){
+		isValid = isInputValid('reason');
+	}
+	return isValid;
+};
+/**
+ * Returns boolean isValid 
+ */
+function isInputValid(inputId) {
+	if($('input#'+inputId).val() == ''){
+		displayFormError(inputId);
+		return false;
+	}else{
+		hideFormError(inputId);
+		return true;
+	}
+};
+function displayFormError(inputId){
+	var errorInput = $('input#'+inputId);
+	if(errorInput.siblings('span.help-inline').length == 0){
+		errorInput.parent().append($('<span/>').addClass('help-inline').text('This field is required!'));
+	}
+	errorInput.parents('div.control-group').first().addClass('error');
+};
+function hideFormError(inputId){
+	var noErrorInput = $('input#'+inputId);
+	noErrorInput.siblings('span.help-inline').remove();
+	noErrorInput.parents('div.control-group').first().removeClass('error');
 };
