@@ -21,3 +21,6 @@ body {
 .hide {
 	display: none;
 }
+input, button {
+	height: 50px !important;
+}
