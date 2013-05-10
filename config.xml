@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+    <widget xmlns = "http://www.w3.org/ns/widgets"
+        xmlns:gap = "http://phonegap.com/ns/1.0"
+        id        = "com.phonegap.example"
+        versionCode="10" 
+        version   = "0.0.4">
+    <!-- versionCode is optional and Android only -->
+    <name>MilesDatas</name>
+    <description>
+        A mileage recording app. 
+    </description>
+    <author href="http://www.missionaldigerati.org" email="johnathan@missionaldigerati.org">
+        Johnathan Pulos
+    </author>
+    <access origin="http://milesdatas.herokuapp.com" />
+</widget>
