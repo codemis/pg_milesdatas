@@ -13,7 +13,7 @@ body {
 	text-align: center;
 }
 .icon-auto {
-	background-image: url("/img/auto.png");
+	background-image: url("../img/auto.png");
 	height: 32px;
 	width: 32px;
 	background-position: 0px 0px;
