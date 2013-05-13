@@ -54,6 +54,7 @@ jQuery(document).ready(function($) {
 	 * OnClick event for completing the recording.  This will send to the web server for saving 
 	 */
 	$('a.step-nav-complete').click(function() {
+		alert("I am in the click method.");
 		saveData();
 		return false;
 	});
@@ -231,9 +232,12 @@ function hideFormError(inputId){
 	noErrorInput.parents('div.control-group').first().removeClass('error');
 };
 function saveData() {
+	alert("I am in the saveData Method.");
 	var dataParam = {'api_key': API_KEY, 'record': {'car': cars[data['selectedCarIndex']], 'start_lat': data['starting']['lat'], 'start_long': data['starting']['long'], 'start_location': data['starting']['location'], 'start_odometer': data['starting']['odometer'], 'start_use_coords': data['starting']['useCoords'], 'stop_lat': data['stopping']['lat'], 'stop_long': data['stopping']['long'], 'stop_location': data['stopping']['location'], 'stop_odometer': data['stopping']['odometer'], 'stop_use_coords': data['stopping']['useCoords'], 'reason': data['starting']['reason']}};
+	alert(dataParam);
 	$.post('http://milesdatas.herokuapp.com/records.json', dataParam,
 	 function(resp){
+			alert("We got a response.");
 	    $('#step-nav').fadeOut('slow', function() {
 				data = {'selectedCarIndex': '', 'starting': {'useCoords': false}, 'stopping': {'useCoords': false}};
 				startingStepComplete = false;

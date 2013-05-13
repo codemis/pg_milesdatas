@@ -12,5 +12,5 @@
     <author href="http://www.missionaldigerati.org" email="johnathan@missionaldigerati.org">
         Johnathan Pulos
     </author>
-    <access origin="http://milesdatas.herokuapp.com" />
+    <access origin="*" />
 </widget>
