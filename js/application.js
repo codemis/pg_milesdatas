@@ -19,16 +19,26 @@ var startingStepComplete = false;
  */
 var stoppingStepComplete = false;
 /**
+ * A variable to hold the local storage object
+ * @var Object 
+ */
+var localStorage;
+/**
+ * The API_KEY to access the POST request
+ * @var String 
+ */
+var API_KEY = "";
+/**
  * Trigger events on the page load. 
  */
 jQuery(document).ready(function($) {
-	/**
-	 * Initial page shows a button for each car to select the car your using 
-	 */
-	$.each(cars, function(index, val) {
-		var carButton = $('<a/>').addClass("btn btn-large btn-primary btn-block cars").attr("rel", index).html(val+"<br><i class='icon-auto'></i></a>");
-		$('#step-one').append(carButton);
-	});
+	setupStepOne();
+	localStorage = window.localStorage;
+	API_KEY = localStorage.API_KEY;
+	if(API_KEY == null || API_KEY == "" || API_KEY == undefined) {
+		$('#step-api-key button.close').hide();
+		$('#step-api-key').modal({"backdrop": "static"});
+	}
 	/**
 	 * OnClick event for car buttons 
 	 */
@@ -53,7 +63,9 @@ jQuery(document).ready(function($) {
 	/**
 	 * OnClick event for completing the recording.  This will send to the web server for saving 
 	 */
-	$('a.step-nav-complete').click(function() {
+	$('a.step-nav-complete').click(function(e) {
+		e.preventDefault();
+		$(this).text('Sending').addClass('disabled');
 		saveData();
 		return false;
 	});
@@ -86,13 +98,53 @@ jQuery(document).ready(function($) {
 		return false;
 	});
 	/**
+	 * Handle the API Form 
+	 */
+	$('form#api-key-form').submit(function() {
+		if(isInputValid("api-key-input")) {
+			saveAndSetApiKey();
+			$('#step-api-key').modal('hide');
+		}
+		return false;
+	});
+	/**
 	 * OnClick event for setting automatically determine GPS with coordinates 
 	 */
 	$('button.coordinates').click(function() {
 		switchCoordinates(this);
 		return false;
 	});
+	/**
+	 * Handle the settings button 
+	 */
+	$('a.settings-btn').click(function() {
+		$('#step-api-key button.close').show();
+		$("#api-key-input").val(API_KEY);
+		$('#step-api-key').modal({});
+		return false;
+	});
 });
+/**
+ * Setup the first step
+ * @return void 
+ */
+function setupStepOne() {
+	/**
+	 * Initial page shows a button for each car to select the car your using 
+	 */
+	$.each(cars, function(index, val) {
+		var carButton = $('<a/>').addClass("btn btn-large btn-primary btn-block cars").attr("rel", index).html(val+"<br><i class='icon-auto'></i></a>");
+		$('#step-one').append(carButton);
+	});
+};
+/**
+ * Save the new API Key, and set it to the local var
+ * @return void 
+ */
+function saveAndSetApiKey() {
+	localStorage.API_KEY = $("#api-key-input").val();
+	API_KEY = localStorage.API_KEY;
+};
 /**
  * Callback function when the starting coordinates are located
  * @var Object pos the coordinates object provided by the navigator.geolocation.getCurrentPosition method
@@ -234,7 +286,6 @@ function saveData() {
 	var dataParam = {'api_key': API_KEY, 'record': {'car': cars[data['selectedCarIndex']], 'start_lat': data['starting']['lat'], 'start_long': data['starting']['long'], 'start_location': data['starting']['location'], 'start_odometer': data['starting']['odometer'], 'start_use_coords': data['starting']['useCoords'], 'stop_lat': data['stopping']['lat'], 'stop_long': data['stopping']['long'], 'stop_location': data['stopping']['location'], 'stop_odometer': data['stopping']['odometer'], 'stop_use_coords': data['stopping']['useCoords'], 'reason': data['starting']['reason']}};
 	$.post('http://milesdatas.herokuapp.com/records.json', dataParam,
 	 function(resp){
-			alert("We got a response.");
 	    $('#step-nav').fadeOut('slow', function() {
 				data = {'selectedCarIndex': '', 'starting': {'useCoords': false}, 'stopping': {'useCoords': false}};
 				startingStepComplete = false;

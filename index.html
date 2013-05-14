@@ -11,12 +11,33 @@
         <div class="navbar navbar-inverse navbar-fixed-top">
               <div class="navbar-inner">
                 <div class="banner centered">
-                  <span class="brand"><i class="icon-road icon-white"></i> Miles Datas</span>
+                  <span class="brand"><i class="icon-road icon-white"></i> Miles Datas<a class="pull-right btn btn-small btn-info settings-btn" href=""><i class="icon-wrench icon-white"></i></a></span>
                 </div>
               </div>
             </div>
         <div class="container-fluid">
           <div id="step-one" class="step centered"></div>
+          <div id="step-api-key" class="step hide modal fade">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                <h3 id="myModalLabel">API Key Settings</h3>
+                <p>Please provide us with your correct API Key</p>
+            </div>
+            <div class="modal-body">
+              <form id="api-key-form">
+                <div class="control-group">
+                  <div class="controls">
+                    <input type="text" id="api-key-input" placeholder="API Key" class="input-block-level">
+                  </div>
+                </div>
+                <div class="control-group">
+                  <div class="controls">
+                    <button type="submit" class="btn btn-block">Save</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
           <div id="step-nav" class="step centered hide">
             <h3 class="title">Title</h3>
             <a href="#" class="btn btn-large btn-block step-nav-link" rel="step-two"><i class="icon-exclamation-sign"></i> Starting Data</a>

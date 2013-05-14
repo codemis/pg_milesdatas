@@ -5,6 +5,7 @@ body {
 	float: none;
 	color: #FFFFFF;
 	font-weight: normal;
+	position: relative;
 }
 .banner span.brand i {
 	margin-top: 5px;
@@ -23,4 +24,11 @@ body {
 }
 input, button {
 	height: 50px !important;
+}
+.settings-btn {
+	position: relative;
+	top: -7px;
+}
+.banner .settings-btn i {
+	margin-top: 0px !important;
 }
