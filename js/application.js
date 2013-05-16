@@ -196,9 +196,16 @@ function setupForms(step) {
 		$('input#starting-location').val(data['starting']['location']);
 		$('input#starting-odometer').val(data['starting']['odometer']);
 		$('input#reason').val(data['starting']['reason']);
+	}else if((step == 'step-two') && (stoppingStepComplete === false)){
+		$('input#starting-location').val("");
+		$('input#starting-odometer').val("");
+		$('input#reason').val();
 	}else if((step == 'step-three') && (stoppingStepComplete === true)){
 		$('input#stopping-location').val(data['stopping']['location']);
 		$('input#stopping-odometer').val(data['stopping']['odometer']);
+	}else if((step == 'step-three') && (stoppingStepComplete === false)){
+		$('input#stopping-location').val("");
+		$('input#stopping-odometer').val("");
 	}
 };
 /**
@@ -282,14 +289,28 @@ function hideFormError(inputId){
 	noErrorInput.siblings('span.help-inline').remove();
 	noErrorInput.parents('div.control-group').first().removeClass('error');
 };
+/**
+ * Reset the app to defaults
+ * @return void 
+ */
+function resetApp() {
+	$.extend(data, {'selectedCarIndex': '', 'starting': {'useCoords': false}, 'stopping': {'useCoords': false}});
+	startingStepComplete = false;
+	stoppingStepComplete = false;
+	$('a.step-nav-link[rel="step-two"]').children('i').addClass('icon-exclamation-sign').removeClass('icon-ok');
+	$('a.step-nav-link[rel="step-three"]').children('i').addClass('icon-exclamation-sign').removeClass('icon-ok');
+};
+/**
+ * Save the data by passing to API
+ * @return void 
+ */
 function saveData() {
 	var dataParam = {'api_key': API_KEY, 'record': {'car': cars[data['selectedCarIndex']], 'start_lat': data['starting']['lat'], 'start_long': data['starting']['long'], 'start_location': data['starting']['location'], 'start_odometer': data['starting']['odometer'], 'start_use_coords': data['starting']['useCoords'], 'stop_lat': data['stopping']['lat'], 'stop_long': data['stopping']['long'], 'stop_location': data['stopping']['location'], 'stop_odometer': data['stopping']['odometer'], 'stop_use_coords': data['stopping']['useCoords'], 'reason': data['starting']['reason']}};
+	resetApp();
 	$.post('http://milesdatas.herokuapp.com/records.json', dataParam,
 	 function(resp){
 	    $('#step-nav').fadeOut('slow', function() {
-				data = {'selectedCarIndex': '', 'starting': {'useCoords': false}, 'stopping': {'useCoords': false}};
-				startingStepComplete = false;
-				stoppingStepComplete = false;
+				$('a.step-nav-complete').text('Save').removeClass('disabled');
 				$('#step-one').fadeIn('slow', function() {
 					alert('Your record has been saved!');
 				});
