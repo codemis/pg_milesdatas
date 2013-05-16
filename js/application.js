@@ -54,7 +54,7 @@ jQuery(document).ready(function($) {
 	/**
 	 * OnClick event for the step buttons 
 	 */
-	$('a.step-nav-link').click(function() {
+	$('button.step-nav-link').click(function() {
 		var rel = $(this).attr('rel');
 		setupForms(rel);
 		$('#step-nav').fadeOut('slow', function() {
@@ -64,9 +64,9 @@ jQuery(document).ready(function($) {
 	/**
 	 * OnClick event for completing the recording.  This will send to the web server for saving 
 	 */
-	$('a.step-nav-complete').click(function(e) {
+	$('button.step-nav-complete').click(function(e) {
 		e.preventDefault();
-		$(this).text('Sending').addClass('disabled');
+		$(this).text('Sending').attr("disabled", "disabled").addClass('disabled');
 		saveData();
 		return false;
 	});
@@ -77,7 +77,7 @@ jQuery(document).ready(function($) {
 		if(isFormValid('starting') === true){
 			setStartingFormData();
 			$('#step-two').fadeOut('slow', function() {
-				$('a.step-nav-link[rel="step-two"]').children('i').removeClass('icon-exclamation-sign').addClass('icon-ok');
+				$('button.step-nav-link[rel="step-two"]').children('i').removeClass('icon-exclamation-sign').addClass('icon-ok');
 				checkAndShowSaveButton();
 				$('#step-nav').fadeIn('slow');
 			});
@@ -91,7 +91,7 @@ jQuery(document).ready(function($) {
 		if(isFormValid('stopping') === true){
 			setStoppingFormData();
 			$('#step-three').fadeOut('slow', function() {
-				$('a.step-nav-link[rel="step-three"]').children('i').removeClass('icon-exclamation-sign').addClass('icon-ok');
+				$('button.step-nav-link[rel="step-three"]').children('i').removeClass('icon-exclamation-sign').addClass('icon-ok');
 				checkAndShowSaveButton();
 				$('#step-nav').fadeIn('slow');
 			});
@@ -152,7 +152,9 @@ function saveAndSetApiKey() {
  * @return void
  */
 function handleStartPosition(pos) {
-	$.extend(data['starting'], {'lat': pos.coords.latitude, 'long': pos.coords.longitude});
+	$('form#starting-form button.coordinates').removeClass('btn-danger').addClass('btn-success').html('<i class="icon-screenshot icon-white"></i> Coordinates: On');
+	$('form#starting-form button.record').removeAttr("disabled").removeClass('disabled');
+	$.extend(data['starting'], {'lat': pos.coords.latitude, 'long': pos.coords.longitude, 'useCoords': true});
 };
 /**
  * Callback function when the stopping coordinates are located
@@ -160,7 +162,17 @@ function handleStartPosition(pos) {
  * @return void
  */
 function handleStopPosition(pos) {
-	$.extend(data['stopping'], {'lat': pos.coords.latitude, 'long': pos.coords.longitude});
+	$('form#stopping-form button.coordinates').removeClass('btn-danger').addClass('btn-success').html('<i class="icon-screenshot icon-white"></i> Coordinates: On');
+	$('form#stopping-form button.record').removeAttr("disabled").removeClass('disabled');
+	$.extend(data['stopping'], {'lat': pos.coords.latitude, 'long': pos.coords.longitude, 'useCoords': true});
+};
+/**
+ * Callback function when an error is thrown when retrieving coordinates
+ * @var Object error the error returned by navigator.geolocation.getCurrentPosition method
+ * @return void
+ */
+function handleError(error) {
+	alert("There was a problem finding your coordinates.");
 };
 /**
  * Sets up the starting date into the data JSON Object
@@ -184,7 +196,7 @@ function setStoppingFormData() {
  */
 function checkAndShowSaveButton() {
 	if((startingStepComplete === true) && (stoppingStepComplete === true)){
-		$('a.step-nav-complete').removeClass('disabled');
+		$('button.step-nav-complete').removeAttr("disabled").removeClass('disabled');
 	}
 };
 /**
@@ -224,13 +236,13 @@ function switchCoordinates(ele) {
 		data[rel]['long'] = null;
 	}else{
 		if(navigator.geolocation){
-			data[rel]['useCoords'] = true;
 			if(rel == 'starting') {
-				navigator.geolocation.getCurrentPosition(handleStartPosition);
+				$('form#starting-form button.record').attr("disabled", "disabled").addClass('disabled');
+				navigator.geolocation.getCurrentPosition(handleStartPosition,handleError);
 			} else{
-				navigator.geolocation.getCurrentPosition(handleStopPosition);
+				$('form#stopping-form button.record').attr("disabled", "disabled").addClass('disabled');
+				navigator.geolocation.getCurrentPosition(handleStopPosition,handleError);
 			}
-			button.removeClass('btn-danger').addClass('btn-success').html('<i class="icon-screenshot icon-white"></i> Coordinates: On');
 		} else{
 			alert('Sorry, but your phone does not offer your coordinates.');
 		}
@@ -304,8 +316,8 @@ function resetApp() {
 	$.extend(data, {'selectedCarIndex': '', 'starting': {'useCoords': false}, 'stopping': {'useCoords': false}});
 	startingStepComplete = false;
 	stoppingStepComplete = false;
-	$('a.step-nav-link[rel="step-two"]').children('i').addClass('icon-exclamation-sign').removeClass('icon-ok');
-	$('a.step-nav-link[rel="step-three"]').children('i').addClass('icon-exclamation-sign').removeClass('icon-ok');
+	$('button.step-nav-link[rel="step-two"]').children('i').addClass('icon-exclamation-sign').removeClass('icon-ok');
+	$('button.step-nav-link[rel="step-three"]').children('i').addClass('icon-exclamation-sign').removeClass('icon-ok');
 	$('button.coordinates').removeClass('btn-success').addClass('btn-danger').html('<i class="icon-screenshot icon-white"></i> Coordinates: Off');
 };
 /**
@@ -318,7 +330,7 @@ function saveData() {
 	$.post('http://milesdatas.herokuapp.com/records.json', dataParam,
 	 function(resp){
 	    $('#step-nav').fadeOut('slow', function() {
-				$('a.step-nav-complete').text('Save').removeClass('disabled');
+				$('button.step-nav-complete').text('Save');
 				$('#step-one').fadeIn('slow', function() {
 					alert('Your record has been saved!');
 				});
