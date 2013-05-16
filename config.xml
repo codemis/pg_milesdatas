@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
     <widget xmlns = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
-        id        = "com.phonegap.example"
+        id        = "com.johnathanpulos.PGMilesDatas"
         versionCode="10" 
-        version   = "0.0.6">
+        version   = "0.0.7">
     <!-- versionCode is optional and Android only -->
     <name>MilesDatas</name>
     <description>
         A mileage recording app. Requires access to an API key. 
     </description>
     <author href="http://www.missionaldigerati.org" email="johnathan@missionaldigerati.org">
-        Johnathan Pulos
+        iOS Zombie Groupies
     </author>
     <access origin="*" />
     <icon src="icon.png" />
