@@ -32,6 +32,7 @@ var API_KEY = "";
  * Trigger events on the page load. 
  */
 jQuery(document).ready(function($) {
+	resetApp();
 	setupStepOne();
 	localStorage = window.localStorage;
 	API_KEY = localStorage.API_KEY;
@@ -73,7 +74,7 @@ jQuery(document).ready(function($) {
 	 * OnSubmit event for the starting form 
 	 */
 	$('form#starting-form').submit(function() {
-		if(isFormIsValid('starting') === true){
+		if(isFormValid('starting') === true){
 			setStartingFormData();
 			$('#step-two').fadeOut('slow', function() {
 				$('a.step-nav-link[rel="step-two"]').children('i').removeClass('icon-exclamation-sign').addClass('icon-ok');
@@ -87,7 +88,7 @@ jQuery(document).ready(function($) {
 	 * OnSubmit event for the stopping form 
 	 */
 	$('form#stopping-form').submit(function(){
-		if(isFormIsValid('stopping') === true){
+		if(isFormValid('stopping') === true){
 			setStoppingFormData();
 			$('#step-three').fadeOut('slow', function() {
 				$('a.step-nav-link[rel="step-three"]').children('i').removeClass('icon-exclamation-sign').addClass('icon-ok');
@@ -199,7 +200,7 @@ function setupForms(step) {
 	}else if((step == 'step-two') && (stoppingStepComplete === false)){
 		$('input#starting-location').val("");
 		$('input#starting-odometer').val("");
-		$('input#reason').val();
+		$('input#reason').val("");
 	}else if((step == 'step-three') && (stoppingStepComplete === true)){
 		$('input#stopping-location').val(data['stopping']['location']);
 		$('input#stopping-odometer').val(data['stopping']['odometer']);
@@ -240,16 +241,22 @@ function switchCoordinates(ele) {
  * @var String formType the type of form to validate (starting or stopping)
  * @return boolean 
  */
-function isFormIsValid(formType) {
+function isFormValid(formType) {
 	var isValid = true;
 	if(data[formType]['useCoords'] === false){
-		isValid = isInputValid(formType+'-location');
+		if(isInputValid(formType+'-location') === false){
+			isValid = false;
+		}
 	}else{
 		hideFormError(formType+'-location');
 	}
-	isValid = isInputValid(formType+'-odometer');
+	if(isInputValid(formType+'-odometer') === false){
+		isValid = false;
+	}
 	if(formType == 'starting'){
-		isValid = isInputValid('reason');
+		if(isInputValid('reason') === false){
+			isValid = false;
+		}
 	}
 	return isValid;
 };
@@ -299,6 +306,7 @@ function resetApp() {
 	stoppingStepComplete = false;
 	$('a.step-nav-link[rel="step-two"]').children('i').addClass('icon-exclamation-sign').removeClass('icon-ok');
 	$('a.step-nav-link[rel="step-three"]').children('i').addClass('icon-exclamation-sign').removeClass('icon-ok');
+	$('button.coordinates').removeClass('btn-success').addClass('btn-danger').html('<i class="icon-screenshot icon-white"></i> Coordinates: Off');
 };
 /**
  * Save the data by passing to API
