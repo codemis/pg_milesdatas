@@ -3,11 +3,11 @@
         xmlns:gap = "http://phonegap.com/ns/1.0"
         id        = "com.johnathanpulos.PGMilesDatas"
         versionCode="10" 
-        version   = "0.0.9">
+        version   = "0.0.10">
     <!-- versionCode is optional and Android only -->
     <name>MilesDatas</name>
     <description>
-        A mileage recording app. Requires access to an API key. 
+        A mileage recording app. Requires access to an API key. Beta Release.
     </description>
     <author href="http://www.missionaldigerati.org" email="johnathan@missionaldigerati.org">
         iOS Zombie Groupies
@@ -21,11 +21,12 @@
     <icon src="img/icons/ios/icon_small.png" gap:platform="ios" width="29" height="29" />
     <icon src="img/icons/ios/icon_small_2x.png" gap:platform="ios" width="58" height="58" />
     <icon src="img/icons/ios/icon_2x_ipad.png" gap:platform="ios" width="144" height="144" />
-    <gap:splash src="img/splash/ios/default_landscape.png" gap:platform="ios" width="1024" height="748" />
-    <gap:splash src="img/splash/ios/default_568h_2x.png" gap:platform="ios" width="640" height="1136" />
-    <gap:splash src="img/splash/ios/default_portrait.png" gap:platform="ios" width="768" height="1004" />
+    <gap:splash src="splash.png" />
     <gap:splash src="img/splash/ios/default.png" gap:platform="ios" width="320" height="480" />
     <gap:splash src="img/splash/ios/default_2x.png" gap:platform="ios" width="640" height="960" />
+    <gap:splash src="img/splash/ios/default_568h_2x.png" gap:platform="ios" width="640" height="1136" />
+    <gap:splash src="img/splash/ios/default_landscape.png" gap:platform="ios" width="1024" height="768" />
+    <gap:splash src="img/splash/ios/default_portrait.png" gap:platform="ios" width="768" height="1024" />
     <gap:splash src="img/splash/ios/ipad_retina_landscape.png" gap:platform="ios" width="2048" height="1496" />
     <gap:splash src="img/splash/ios/ipad_retina_portrait.png" gap:platform="ios" width="1536" height="2008" />
 </widget>
