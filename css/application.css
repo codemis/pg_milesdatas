@@ -1,5 +1,7 @@
 body {
-/*	margin-top: 50px;*/
+}
+div.content {
+	padding-top: 10px;
 }
 .banner span.brand {
 	float: none;
